@@ -103,7 +103,10 @@ public class CharacterController3D : MonoBehaviour, I_InputMovement
     // Start is called before the first frame update
     void Start()
     {
-        
+        if(referenceCamera == null)
+        {
+            referenceCamera = Camera.main.transform;
+        }
     }
 
     // Update is called once per frame
@@ -173,6 +176,7 @@ public class CharacterController3D : MonoBehaviour, I_InputMovement
         {
             // sprinting
             floorPlaneMovement = correctedMoveInput * moveSpeed * sprintScale * moveSpeedScale;
+            isSprintPressed = false;
         }
         else
         {
