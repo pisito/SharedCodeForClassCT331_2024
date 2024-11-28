@@ -20,7 +20,7 @@ public class HandleInputOldSystem : MonoBehaviour
 
     void Start()
     {
-        if (targetGameObject != null)
+        if (targetGameObject == null)
         {
             targetGameObject = transform;
         }

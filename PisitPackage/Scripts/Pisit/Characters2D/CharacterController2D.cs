@@ -14,17 +14,23 @@ namespace Pisit.Controllers
         private float verticalInput;
         private bool isJumpPressed;
         private bool isGrounded;
+        private bool isSprintedPressed;
 
         private Vector3 originalTransformScale;
         private Vector2 previousMoveInput;
 
+        private float multiJumpCount = 0;
+
         #region Parameters
-        public float moveSpeed = 4f;
+        public float moveSpeed = 2f;
         public float sprintSpeedMod = 2.0f;
         public float moveSpeedMod = 1.0f;
         public float jumpPower = 2f;
         public float groundCheckRadius = 0.4f;
         public LayerMask groundLayerMask;
+        public float multiJumpMax = 1;
+        public KeyCode sprintKey = KeyCode.LeftShift;
+        public bool canSprint = false;
         #endregion
 
 
@@ -38,27 +44,48 @@ namespace Pisit.Controllers
         // Update is called once per frame
         void Update()
         {
-            if(moveInput != Vector2.zero)
+            if (moveInput != Vector2.zero)
             {
                 previousMoveInput = moveInput;
             }
             handleMoveInput();
             handleJumpInput();
             IsGroundCheck();
+
+            if (isGrounded)
+            {
+                multiJumpCount = 0; // Reset
+            }
+
         }
 
         private void FixedUpdate()
         {
             Vector2 newVelocity = new Vector2(moveInput.x, 0f);
-            newVelocity *= moveSpeed * moveSpeedMod;
+
+            if (isSprintedPressed)
+            {
+                newVelocity *= (moveSpeed * sprintSpeedMod) * moveSpeedMod;
+            }
+            else
+            {
+                newVelocity *= moveSpeed * moveSpeedMod;
+            }
+
 
             newVelocity.y = rb.velocity.y;
 
-            if(isJumpPressed & isGrounded )
+            // Handle Jump
+            if (isJumpPressed & multiJumpCount < multiJumpMax)
             {
                 newVelocity.y = -2 * Physics2D.gravity.y * jumpPower;
                 isJumpPressed = false;
                 isGrounded = false;
+                multiJumpCount++;
+            }
+            else
+            {
+                isJumpPressed = false;
             }
 
             rb.velocity = newVelocity;
@@ -70,15 +97,23 @@ namespace Pisit.Controllers
             horizontalInput = Input.GetAxisRaw("Horizontal");
             verticalInput = Input.GetAxisRaw("Vertical");
             moveInput = new Vector2(horizontalInput, verticalInput);
+            if (Input.GetKey(sprintKey) && canSprint)
+            {
+                isSprintedPressed = true;
+            }
+            else
+            {
+                isSprintedPressed = false;
+            }
         }
 
         void handleJumpInput()
         {
-            if(Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("Jump"))
             {
                 isJumpPressed = true;
             }
-            
+
         }
 
         void IsGroundCheck()
@@ -88,7 +123,7 @@ namespace Pisit.Controllers
 
         void HandleFlipX()
         {
-            if(moveInput != Vector2.zero)
+            if (moveInput != Vector2.zero)
             {
                 if (moveInput.x < 0f)
                 {
@@ -110,7 +145,7 @@ namespace Pisit.Controllers
                     transform.localScale = new Vector3(originalTransformScale.x, originalTransformScale.y, originalTransformScale.z);
                 }
             }
-            
+
         }
 
         private void OnDrawGizmosSelected()

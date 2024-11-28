@@ -176,12 +176,13 @@ public class CharacterController3D : MonoBehaviour, I_InputMovement
         {
             // sprinting
             floorPlaneMovement = correctedMoveInput * moveSpeed * sprintScale * moveSpeedScale;
-            isSprintPressed = false;
+            //isSprintPressed = false;
         }
         else
         {
             // no sprinting
             floorPlaneMovement = correctedMoveInput *moveSpeed * moveSpeedScale;
+            
         }
     }
 
