@@ -17,11 +17,7 @@ public class HandleNewInputSystem3D : MonoBehaviour
     public bool isJumpPressed;
     public bool isSprintPressed;
 
-    #region newInputReader
-    // Default system wide input action map
-    Vector2 moveInputReader;
-    #endregion
-    void Start()
+    void Awake()
     {
         if (targetGameObject == null)
         {
