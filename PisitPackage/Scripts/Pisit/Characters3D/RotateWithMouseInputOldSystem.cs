@@ -28,7 +28,7 @@ public class RotateWithMouseInputOldSystem : MonoBehaviour
 
     public bool useRotationKey = true;
     // Key to hold for enabling rotation, default can be key or mouse button, mouse1
-    public KeyCode rotationKey = KeyCode.LeftShift;
+    public KeyCode rotationKey = KeyCode.Mouse1;
 
     // Start is called before the first frame update
     void Start()

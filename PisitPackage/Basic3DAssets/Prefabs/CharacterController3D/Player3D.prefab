@@ -54,7 +54,7 @@ MonoBehaviour:
   invertX: 0
   invertY: 1
   useRotationKey: 1
-  rotationKey: 304
+  rotationKey: 324
 --- !u!1 &4253252879828887423
 GameObject:
   m_ObjectHideFlags: 0
